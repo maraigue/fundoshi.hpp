@@ -126,7 +126,7 @@ namespace fundoshi{
         }
         
         // comparisons
-        int compare(const basic_string<CharType> & other){
+        int compare(const basic_string<CharType> & other) const{
         	return fundoshi::compare<CharType>(*this, other); }
         
         bool operator ==(const basic_string<CharType> & other) const {
