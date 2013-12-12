@@ -17,6 +17,8 @@
 // APIはC++標準のstring(basic_string)に似せてあります。が最小限の内容しか実装していません。
 
 namespace fundoshi{
+	template <class CharType> class basic_string;
+	
     template <class CharType>
     static size_t strlen(const CharType * str){
         size_t result = 0;
@@ -26,6 +28,53 @@ namespace fundoshi{
             result++;
         }
         return result;
+    }
+    
+    template <class CharType>
+    static void print_char(std::ostream & os, CharType c){
+    	if(c >= 0x20 && c <= 0x7E){
+            os << static_cast<char>(c);
+    	}else{
+            os << '[' << c << ']';
+        }
+    }
+    
+    template <>
+    void print_char(std::ostream & os, signed char c){
+    	if(c >= 0x20 && c <= 0x7E){
+            os << c;
+    	}else{
+            os << '[' << static_cast<signed int>(c) << ']';
+        }
+    }
+    
+    template <>
+    void print_char(std::ostream & os, unsigned char c){
+    	if(c >= 0x20 && c <= 0x7E){
+            os << c;
+    	}else{
+            os << '[' << static_cast<unsigned int>(c) << ']';
+        }
+    }
+    
+    template <class CharType>
+    static int compare(const basic_string<CharType> & str1, const basic_string<CharType> & str2){
+        size_t min_length = (str1.length() < str2.length() ? str1.length() : str2.length());
+        for(size_t i = 0; i < min_length; i++){
+            if(str1[i] < str2[i]){
+                return -1;
+            }else if(str1[i] > str2[i]){
+                return 1;
+            }
+        }
+        
+        // if all characters are compared
+        if(str1.length() < str2.length()){
+	        return -1;
+        }else if(str1.length() > str2.length()){
+	        return 1;
+        }
+        return 0;
     }
     
     // ---------- basic_string ----------
@@ -77,71 +126,27 @@ namespace fundoshi{
         }
         
         // comparisons
+        int compare(const basic_string<CharType> & other){
+        	return fundoshi::compare<CharType>(*this, other); }
+        
         bool operator ==(const basic_string<CharType> & other) const {
-        	return compare(*this, other) == 0; }
+        	return fundoshi::compare<CharType>(*this, other) == 0; }
 		
         bool operator !=(const basic_string<CharType> & other) const {
-        	return compare(*this, other) != 0; }
+        	return fundoshi::compare<CharType>(*this, other) != 0; }
 		
         bool operator < (const basic_string<CharType> & other) const {
-        	return compare(*this, other) < 0; }
+        	return fundoshi::compare<CharType>(*this, other) < 0; }
 		
         bool operator <=(const basic_string<CharType> & other) const {
-        	return compare(*this, other) <= 0; }
+        	return fundoshi::compare<CharType>(*this, other) <= 0; }
 		
         bool operator > (const basic_string<CharType> & other) const {
-        	return compare(*this, other) > 0; }
+        	return fundoshi::compare<CharType>(*this, other) > 0; }
         
         bool operator >=(const basic_string<CharType> & other) const {
-        	return compare(*this, other) >= 0; }
+        	return fundoshi::compare<CharType>(*this, other) >= 0; }
     };
-    
-    template <class CharType>
-    static void print_char(std::ostream & os, CharType c){
-    	if(c >= 0x20 && c <= 0x7E){
-            os << static_cast<char>(c);
-    	}else{
-            os << '[' << c << ']';
-        }
-    }
-    
-    template <>
-    void print_char(std::ostream & os, signed char c){
-    	if(c >= 0x20 && c <= 0x7E){
-            os << c;
-    	}else{
-            os << '[' << static_cast<signed int>(c) << ']';
-        }
-    }
-    
-    template <>
-    void print_char(std::ostream & os, unsigned char c){
-    	if(c >= 0x20 && c <= 0x7E){
-            os << c;
-    	}else{
-            os << '[' << static_cast<unsigned int>(c) << ']';
-        }
-    }
-    
-    template <class CharType>
-    static int compare(const basic_string<CharType> & str1, const basic_string<CharType> & str2){
-        size_t min_length = (str1.length() < str2.length() ? str1.length() : str2.length());
-        for(size_t i = 0; i < min_length; i++){
-            if(str1[i] < str2[i]){
-                return -1;
-            }else if(str1[i] > str2[i]){
-                return 1;
-            }
-        }
-        
-        // if all characters are compared
-        if(str1.length() < str2.length()){
-	        return -1;
-        }else if(str1.length() > str2.length()){
-	        return 1;
-        }
-        return 0;
-    }
 	
     typedef basic_string<char> string;
     typedef basic_string<wchar_t> wstring;
