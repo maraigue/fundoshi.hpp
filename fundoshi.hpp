@@ -1,20 +1,37 @@
+/** \file fundoshi.hpp
+ */
+
+/**
+ * \mainpage
+ * # fundoshi.hpp - A C++ library for multiple string instances with shared memory
+ * 
+ * メモリを共有したまま複数の文字列インスタンスを表現するためのC++ライブラリ
+ * 
+ * (C)2011- H.Hiro/Maraigue (mail: main at hhiro.net)
+ * 
+ * ## Important classes and methods
+ * 
+ * * `fundoshi::string` describes an ordinary string (consisting of `char`) whose source memory is allocated with `std::string`, `char *` and so on.
+ * * `fundoshi::wstring` describes a wide-character string (consisting of `wchar_t`) whose source memory is allocated with `std::wstring`, `wchar_t *` and so on.
+ * * Strings of other character types can be described by `fundoshi::basic_string<CHAR_TYPE>` like `std::basic_string<CHAR_TYPE>`.
+ * * See the documentation for `fundoshi::basic_string` for the defined methods.
+ *   * Methods and other APIs are almost the same as those in `std::basic_string` (`std::string`), although some methods are omitted.
+ * 
+ * ## 重要なクラス・メソッド
+ * 
+ * * `fundoshi::string`は、`std::string`や`char *`などにより確保されたメモリを元とする、`char`からなる普通の文字列 を表します。
+ * * `fundoshi::wstring`は、`std::wstring`や`wchar_t *`などにより確保されたメモリを元とする、`wchar_t`からなるワイド文字列を表します。
+ * * これ以外の文字の種類に対する文字列は、`fundoshi::basic_string<CHAR_TYPE>`として表されます。`std::basic_string<CHAR_TYPE>`と同様です。
+ * * メソッドについては`fundoshi::basic_string`のドキュメントをご覧ください。
+ *   * メソッドその他のAPIは、ほとんど`std::basic_string`（`std::string`）のものと同じです。ただし、実装されていないメソッドもあります。
+ */
+
 #ifndef _FUNDOSHI_HPP_
 #define _FUNDOSHI_HPP_
 
 #include <iostream>
 #include <string>
 #include <cstring>
-
-// すでにconstな文字列が確保されているメモリ上の領域に対し、
-// その部分文字列を、メモリを共有したまま別の文字列のごとく扱うためのクラス。
-// 名前の由来は「人のふんどしで相撲を取る」より。
-// 
-// 例えば、x = std::string("abcde"); y = x.substr(1, 3); のように部分文字列を
-// 取得してもよいのだが、その場合新たなstringインスタンスが生成されてしまう。
-// そうする必要がない場合、y = fundoshi::string(&(x[1]), 3); とすることで、
-// 文字列のメモリをxと共有したまま、yにxの部分文字列を表現させることができる。
-// 
-// APIはC++標準のstring(basic_string)に似せてあります。が最小限の内容しか実装していません。
 
 namespace fundoshi{
     template <class CharType> class basic_string;
@@ -148,10 +165,21 @@ namespace fundoshi{
             return fundoshi::compare<CharType>(*this, other) >= 0; }
     };
     
+    /**
+     * fundoshi type corresponding to `std::string`, `char *` and so on.
+     */
     typedef basic_string<char> string;
+    
+    /**
+     * fundoshi type corresponding to `std::wstring`, `wchar_t *` and so on.
+     */
     typedef basic_string<wchar_t> wstring;
 };
 
+/**
+ * Prints the specified fundoshi::basic_string.
+ * See %print_char for detailed format.
+ */
 template <class CharType>
 static std::ostream & operator <<(std::ostream & os, const fundoshi::basic_string<CharType> & str){
     for(size_t i = 0; i < str.length(); i++){
@@ -161,4 +189,3 @@ static std::ostream & operator <<(std::ostream & os, const fundoshi::basic_strin
 }
 
 #endif // _FUNDOSHI_HPP_
-
