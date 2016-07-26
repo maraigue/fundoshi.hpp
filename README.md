@@ -2,6 +2,14 @@
 
 (C)2011- H.Hiro/Maraigue (mail: main at hhiro.net)
 
+## Notice (Added on 2016-07-26)
+
+Now the similar feature is available as boost::string_view (former boost::string_ref) in [Boost C++ Libraries](http://www.boost.org/ "Boost C++ Libraries"), or will be standardized as std::string_view in the standard "C++1z" (a.k.a. "C++17"; expected to be standardized in 2017).
+
+## 注記（2016年7月26日追記）
+
+現在は同様の機能が、[Boost C++ Libraries](http://www.boost.org/ "Boost C++ Libraries")中のboost::string_view（元・boost::string_ref）として利用できるほか、C++1z（C++17とも；2017年に標準策定予定）ではstd::string_viewとして標準化される見込みです。
+
 ## Outline
 
 This library generates string instances on a shared memory of a `const` string. For example,
